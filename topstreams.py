@@ -2,12 +2,19 @@ import requests
 import json
 import locale
 import time
-locale.setlocale(locale.LC_ALL, 'en_US')
+# import dotenv
+from dotenv import load_dotenv
+import os
 
+
+locale.setlocale(locale.LC_ALL, 'en_US')
+load_dotenv()
 
 def get_game(game_id):
 	url =  "https://api.twitch.tv/helix/games?id=" + str(game_id)
 	game = requests.get(url, headers={
+		"Client-ID": os.getenv("C_ID"),
+		"Authorization": os.getenv("Auth")
 	})
 	game_body = json.loads(game.text)
 	for g in game_body['data']:
@@ -16,6 +23,8 @@ def get_game(game_id):
 def get_topStreams():	
 	url = 'https://api.twitch.tv/helix/streams?first=10'
 	r = requests.get(url, headers={
+		"Client-ID": os.getenv("C_ID"),
+		"Authorization": os.getenv("Auth")
 		})
 	info_dict = json.loads(r.text)
 
